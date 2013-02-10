@@ -1,6 +1,11 @@
-# InputReader
+InputReader
+===========
 
-TODO: Write a gem description
+[![Build Status](https://travis-ci.org/sealink/input_reader.png?branch=master)](https://travis-ci.org/sealink/input_reader)
+[![Build Status](https://gemnasium.com/sealink/input_reader.png?travis)](https://gemnasium.com/sealink/input_reader)
+[![Build Status](https://codeclimate.com/github/sealink/input_reader.png)](https://codeclimate.com/github/sealink/input_reader)
+
+Reads and parses input and helps build input menus, etc.
 
 ## Installation
 
