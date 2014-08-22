@@ -132,7 +132,8 @@ module InputReader
                           :allow_blank => options[:allow_blank],
                           :prompt      => options[:prompt] || 'Choices (separate with comma): '
                         })
-      input && input.map { |c| items[c - 1] }
+      return [] if input.nil?
+      input.map { |c| items[c - 1] }
     end
 
     def confirmation_required(messages = '')
