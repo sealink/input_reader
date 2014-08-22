@@ -3,16 +3,15 @@ module InputReader
 
     attr_reader :input
 
-    def initialize(options = nil)
-      options ||= {}
-      @prompt = options[:prompt]
-      @allow_blank = options[:allow_blank]
-      @default_value = options[:default_value]
-      @valid_values = Array(options[:valid_values])
-      @validators = Array(options[:validators])
-      @pre_validators = Array(options[:pre_validators])
-      @post_validators = Array(options[:post_validators])
-      @parsers = Array(options[:parsers])
+    def initialize(options = {})
+      @prompt                    = options[:prompt]
+      @allow_blank               = options[:allow_blank]
+      @default_value             = options[:default_value]
+      @valid_values              = Array(options[:valid_values])
+      @validators                = Array(options[:validators])
+      @unparsed_input_validators = Array(options[:pre_validators])
+      @parsed_input_validators   = Array(options[:post_validators])
+      @parsers                   = Array(options[:parsers])
     end
 
 
@@ -20,6 +19,7 @@ module InputReader
       begin
         $stdout.print "#{@prompt} "
         flush
+        read_input
       rescue Exception => e
         puts e.message + e.class.inspect
         exit
@@ -29,7 +29,6 @@ module InputReader
 
 
     private
-
 
     def read
       $stdin.gets.chomp
@@ -41,11 +40,29 @@ module InputReader
     end
 
 
-    def valid_input?
+    def read_input
       @input = read
-      @input = @default_value if blank?(@input)
-      pre_validate(@input) && (blank?(@input) || post_validate(@input = parse(@input)))
+      @input = @default_value if blank_input?
     end
+
+
+    def validate_and_parse_input
+      return false unless validate_unparsed_input
+      return true if blank_input?
+      parse_input
+      validate_parsed_input
+    end
+
+
+    def valid_input?
+      validate_and_parse_input
+    end
+
+
+    def blank_input?
+      blank?(@input)
+    end
+
 
     def blank?(input)
       case input
@@ -55,67 +72,84 @@ module InputReader
       end
     end
 
-    def pre_validate(input)
-      pre_validators = [
+
+    def validate_unparsed_input
+      validators = [
         {
           :validator => lambda { |input| @allow_blank || !blank?(input) },
-          :message => "No input given"
+          :message   => 'No input given'
         },
-      ] + @pre_validators
-      validate(input, pre_validators)
+      ] + @unparsed_input_validators
+      process_validations(validators)
     end
 
-    def post_validate(input)
-      post_validators = [
+
+    def validate_parsed_input
+      validators = [
         {
           :validator => lambda { |input| blank?(@valid_values) || @valid_values.include?(input) },
-          :message => "Invalid input given. Valid values are #{@valid_values.join(', ')}"
+          :message   => "Invalid input given. Valid values are #{@valid_values.join(', ')}"
         }
-      ] + @post_validators + @validators
-      validate(input, post_validators)
+      ] + @parsed_input_validators + @validators
+      process_validations(validators)
     end
 
-    def validate(input,validators)
-      validators.each do |validator|
-        validator_proc = if validator.is_a?(Proc)
-          validator
-        elsif validator.is_a?(Hash)
-          validator[:validator]
-        end
-        error_message = if validator.is_a?(Hash) && validator[:message]
-          validator[:message]
-        else
-          "Invalid input"
-        end
 
-        valid = case validator_proc
-        when Proc
-          validator_proc.call(input)
-        when String, Symbol
-          input.send(validator_proc)
-        else
-          blank?(validator_proc)
-        end
+    def process_validations(validators)
+      validators.each do |validator|
+        valid = process_validation(validator)
 
         if !valid
-          puts error_message
+          puts error_message_for(validator)
           return false
         end
       end
       true
     end
 
-    def parse(input)
+
+    def process_validation(validator)
+      validator_proc = validator_proc_for(validator)
+      case validator_proc
+      when Proc
+        validator_proc.call(@input)
+      when String, Symbol
+        @input.send(validator_proc)
+      else
+        true
+      end
+    end
+
+
+    def validator_proc_for(validator)
+      if validator.is_a?(Proc)
+        validator
+      elsif validator.is_a?(Hash)
+        validator[:validator]
+      end
+    end
+
+
+    def error_message_for(validator)
+      if validator.is_a?(Hash) && validator[:message]
+        validator[:message]
+      else
+        'Invalid input'
+      end
+    end
+
+
+    def parse_input
       @parsers.each do |parser|
         case parser
         when Proc
-          input = parser.call(input)
+          @input = parser.call(@input)
         when String, Symbol
-          input = input.send(parser)
+          @input = @input.send(parser)
         end
       end
-
-      input
+      @input
     end
+
   end
 end
