@@ -9,8 +9,8 @@ module InputReader
       @default_value             = options[:default_value]
       @valid_values              = Array(options[:valid_values])
       @validators                = Array(options[:validators])
-      @unparsed_input_validators = Array(options[:pre_validators])
-      @parsed_input_validators   = Array(options[:post_validators])
+      @unparsed_input_validators = Array(options[:unparsed_input_validators])
+      @parsed_input_validators   = Array(options[:parsed_input_validators])
       @parsers                   = Array(options[:parsers])
     end
 
