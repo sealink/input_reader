@@ -68,10 +68,18 @@ describe InputReader do
     ]
   end
 
-  it 'should handle prompting choices' do
+  it 'should allow selecting between choices' do
     input '2'
     InputReader.select_item(['Alpha', 'Beta', 'Gamma']).should == 'Beta'
+  end
 
+  it 'should return nil if no choice is selected' do
+    input ''
+    InputReader.select_item(['Alpha', 'Beta', 'Gamma'],
+                            :allow_blank => true).should == nil
+  end
+
+  it 'should handle selecting between multiple choices' do
     objects = [
       double(:name => 'Alpha'),
       double(:name => 'Beta'),
@@ -80,6 +88,18 @@ describe InputReader do
     input '1,3'
     InputReader.select_items(objects, :selection_attribute => :name).should ==
       [objects[0], objects[2]]
+  end
+
+  it 'should return an empty array if no choices are selected' do
+    objects = [
+      double(:name => 'Alpha'),
+      double(:name => 'Beta'),
+      double(:name => 'Gamma')
+    ]
+    input ''
+    InputReader.select_items(objects,
+                             :selection_attribute => :name,
+                             :allow_blank         => true).should == []
   end
 
   it 'should allow confirming' do
@@ -105,10 +125,10 @@ describe InputReader do
     end
   end
 
-  it 'should pre validate text' do
+  it 'should validate unparsed input' do
     input ['1', '2']
     InputReader.get_int(
-      :post_validators => [{:validator => :even?}]
+      :parsed_input_validators => [{:validator => :even?}]
     ).should == 2
   end
 end
