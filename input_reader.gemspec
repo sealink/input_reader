@@ -14,12 +14,11 @@ Gem::Specification.new do |gem|
   gem.name          = "input_reader"
   gem.require_paths = ["lib"]
   gem.version       = InputReader::VERSION
-  
-  gem.add_development_dependency('rake')
-  gem.add_development_dependency('rspec', "~> 2.0")
-  gem.add_development_dependency('simplecov')
-  gem.add_development_dependency('simplecov-rcov')
-  gem.add_development_dependency('rdoc')
-  gem.add_development_dependency('guard-rspec')
+
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'simplecov-rcov'
+  gem.add_development_dependency 'guard-rspec'
   gem.add_development_dependency 'coveralls'
 end
