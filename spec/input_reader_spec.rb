@@ -20,16 +20,16 @@ describe InputReader do
 
   it 'should read booleans' do
     input 'y'
-    InputReader.get_boolean.should be_true
+    InputReader.get_boolean.should be true
 
     input 'F'
-    InputReader.get_boolean.should be_false
+    InputReader.get_boolean.should be false
   end
 
   it 'should handle invalid boolean values' do
     input 'x'
     input 'y'
-    InputReader.get_boolean.should be_true
+    InputReader.get_boolean.should be true
   end
 
   it 'should handle dates' do
