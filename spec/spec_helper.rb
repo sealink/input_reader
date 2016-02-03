@@ -16,24 +16,7 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
-if ENV['COVERAGE']
-  require 'simplecov'
-  require 'simplecov-rcov'
-  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
-  SimpleCov.start do
-    add_filter '/vendor/'
-    add_filter '/spec/'
-    add_group 'lib', 'lib'
-  end
-  SimpleCov.at_exit do
-    SimpleCov.result.format!
-    percent = SimpleCov.result.covered_percent
-    unless percent >= 90
-      puts "Coverage must be above 90%. It is #{"%.2f" % percent}%"
-      Kernel.exit(1)
-    end
-  end
-end
+require 'support/coverage_loader'
 
 def expect_output(output)
   $stdout.should_receive(:print).with(output)
@@ -49,4 +32,3 @@ def input(input)
 end
 
 require 'input_reader'
-
