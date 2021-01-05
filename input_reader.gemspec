@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "input_reader"
   gem.require_paths = ["lib"]
   gem.version       = InputReader::VERSION
+  gem.required_ruby_version = '>= 2.6'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
@@ -21,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'simplecov-rcov'
   gem.add_development_dependency 'guard-rspec'
   gem.add_development_dependency 'coveralls'
-  gem.add_development_dependency 'travis'
+  gem.add_development_dependency 'pry-byebug'
 end
