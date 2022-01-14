@@ -5,7 +5,6 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
 
@@ -19,14 +18,14 @@ end
 require 'support/coverage_loader'
 
 def expect_output(output)
-  $stdout.should_receive(:print).with(output)
+  expect($stdout).to receive(:print).with(output)
 end
 
 def input(input)
   if input.is_a?(String)
-    $stdin.should_receive(:gets).once.and_return(input)
+    expect($stdin).to receive(:gets).once.and_return(input)
   elsif input.is_a?(Array)
-    $stdin.should_receive(:gets).exactly(input.size).times.and_return(*input)
+    expect($stdin).to receive(:gets).exactly(input.size).times.and_return(*input)
   else
   end
 end

@@ -1,8 +1,8 @@
 # InputReader
 
 [![Gem Version](https://badge.fury.io/rb/input_reader.svg)](http://badge.fury.io/rb/input_reader)
-[![Build Status](https://travis-ci.org/sealink/input_reader.png?branch=master)](https://travis-ci.org/sealink/input_reader)
-[![Build Status](https://codeclimate.com/github/sealink/input_reader.png)](https://codeclimate.com/github/sealink/input_reader)
+[![Build Status](https://github.com/sealink/input_reader/workflows/Build%20and%20Test/badge.svg?branch=master)](https://github.com/sealink/input_reader/actions)
+[![Coverage Status](https://coveralls.io/repos/sealink/input_reader/badge.png)](https://coveralls.io/r/sealink/input_reader)
 
 Reads and parses input and helps build input menus, etc.
 
