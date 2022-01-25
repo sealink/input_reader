@@ -5,5 +5,9 @@ This changelog adheres to [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## 0.2.0
 
+- [PLAT-183] Ruby 3.1, update deprecated rspec syntax, and publish coverage with github action
+
+## 0.2.0
+
 - [TT-8631] Update to build with github actions / ruby 3.0 / rails 6.1
 - [TT-1392] Changelog file
